@@ -7,24 +7,25 @@ const apiActorsUrl = 'https://lanciweb.github.io/demo/api/actors/';
 
 
 export default function Main () {
-
     const [actresses, setActresses] = useState([])
     const [actors, setActors] = useState([])
+    const [allActors, setAllActors] = useState([])
+    const [filterText, setFilterText] = useState("")
+    const [filteredActors, setFilteredActors] = useState([]);
+
+
 
     useEffect(() => {
-        console.debug('CREAZIONE ELEMENTO MAIN, RICHIEDO DATI INIZIALI AD API');
-
         axios
             .get(apiActressesUrl)
             .then(response => {
-                console.log(response.data);
-
+                // console.log(response.data);
                 setActresses(response.data);
 
                 axios
                     .get(apiActorsUrl)
                     .then(response => {
-                        console.log(response.data);
+                        // console.log(response.data);
                         setActors(response.data);
                     })
                     .catch(err => {
@@ -33,7 +34,6 @@ export default function Main () {
                     .finally(() => {
                         console.info("Seconda richiesta terminata")
                     });
-
             })
             .catch(err => {
                 console.error(err);
@@ -43,11 +43,35 @@ export default function Main () {
             });
     }, [])
 
+
+
+    useEffect(() => {
+        if (!actresses || !actors) return;
+        const newAllActors = actresses.concat(actors);
+        // console.log(actresses);
+        // console.log(actors);
+        // console.log(newAllActors);
+        setAllActors(newAllActors);
+        setFilteredActors(newAllActors);
+    }, [actresses, actors])
+
+
+
+    useEffect(() => {
+        const newFilteredActors = allActors.filter(actor => actor.name.includes(filterText));
+        console.log(newFilteredActors);
+        setFilteredActors(newFilteredActors);
+    }, [filterText])
+
+
+
+
+
     return (
         <main>
 
 
-            <div className="container my-5">
+            {/* <div className="container my-5">
                 <div className="row row-cols-4 g-3">
                     <div className="col-12">
                         <h2>
@@ -134,10 +158,10 @@ export default function Main () {
                                             {
                                                 actor.awards.map((award, index) => {
                                                     return (
-                                                        <>
-                                                            <span key={index}>{award}</span> 
+                                                        <span key={index}>
+                                                            {award}
                                                             {index !== actor.awards.length - 1 ? ", " : ""}
-                                                        </>
+                                                        </span> 
                                                     );
                                                 })
                                             }
@@ -163,21 +187,45 @@ export default function Main () {
                         })
                     }
                 </div>
-            </div>
+            </div> */}
             
 
-            {/* <ul>
-                {
-                    actresses.map(actress => {
-                        return (
-                            <li key={actress.id}>
-                                {actress.name}
-                            </li>
-                        );
-                    })
-                }
-            </ul> */}
 
+            <div className="container my-5">
+                <div className="row row-cols-4 g-3">
+                    <div className="col-12">
+                        <h2>
+                            All Actors
+                        </h2>
+                    </div>
+                    <div className="col-12">
+                        <h4>
+                            Filter by name
+                        </h4>
+                        <input 
+                            value={filterText}
+                            onChange={(e) => setFilterText(e.target.value)}
+
+                            type="text" 
+                            className="form-control" 
+                        />
+                    </div>
+
+                    {
+                        // allActors.map((actor, index) => {
+                        filteredActors.map((actor, index) => {
+                            return(
+                                // * DA ERRORE PER CHIAVI DOPPIE. PER CONTINUARE A USARE ID DOVREI MODIFICARE ID DEGLI ACTORS QUANDO CONCATEBO I DUE ARRAY
+                                // key={actor.id}
+                                <div className="col" key={index}>
+                                    <div className="card shadow py-1 px-2 h-100">{actor.name}</div>
+                                </div>
+                            );
+                        })
+                    }
+
+                </div>
+            </div>
 
 
 

@@ -7,18 +7,13 @@
 
 
 
-/* Mettere come classe .img-fluid se necessario */
-.card-header {
-    /* text-align: center; */
 
-    /* height: 150px; */
+.card-header {
     aspect-ratio: 1;
     overflow: hidden;
     padding: 0;
 }
 img {
-    /* max-height: 100px; */
-
     display: block;
     object-fit: cover;
     object-position: center;
