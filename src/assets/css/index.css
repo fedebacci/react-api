@@ -17,4 +17,10 @@ img {
     display: block;
     object-fit: cover;
     object-position: center;
+
+    /* * Da .img-fluid (PROBABILMENTE DA CORREGGERE) */
+    /* max-width: 100%; */
+    height: auto;
+    /* Modifiche a quanto sopra */
+    width: 100%;
 }

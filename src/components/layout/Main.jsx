@@ -46,7 +46,7 @@ var shuffle = function (array) {
 
 
 
-const paginationStep = 9;
+const paginationStep = 3;
 const initialPagination = {
     start: 0,
     end: paginationStep - 1,
@@ -129,7 +129,7 @@ export default function Main () {
         setPagination(newPagination);
     }
     const goToNextPage = () => {
-        if (pagination.end === allActors.length - 1) return;
+        if (pagination.end >= allActors.length - 1) return;
         const newPagination = {
             start: pagination.start + paginationStep,
             end: pagination.end + paginationStep

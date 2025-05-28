@@ -13,7 +13,8 @@ export default function ActorCard ({ actor }) {
         <div className="col">
             <div className="card shadow h-100">
                 <div className="card-header">
-                    <img className="img-fluid" src={actor.image} alt={actor.name} />
+                    {/* <img className="img-fluid" src={actor.image} alt={actor.name} /> */}
+                    <img src={actor.image} alt={actor.name} />
                 </div>
                 <div className="card-body">
                     <p>
