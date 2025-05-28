@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios"
 
 import Pagination from "../ui/Pagination"
+import FilterByText from "../ui/FilterByText"
 
 
 
@@ -117,10 +118,10 @@ export default function Main () {
         if (filterText === '') {
             setPagination(initialPagination)
         } else {
-            setPagination({ start: 0, end: allActors.length - 1})
+            // setPagination({ start: 0, end: allActors.length - 1})
         }
 
-        const newFilteredActors = allActors.filter(actor => actor.name.includes(filterText));
+        const newFilteredActors = allActors.filter(actor => actor.name.toLowerCase().includes(filterText.toLowerCase()));
         setFilteredActors(newFilteredActors);
     }, [filterText])
 
@@ -283,11 +284,9 @@ export default function Main () {
                         <h4>
                             Filter by name
                         </h4>
-                        <input
-                            value={filterText}
-                            onChange={(e) => setFilterText(e.target.value)}
-                            type="text"
-                            className="form-control"
+                        <FilterByText 
+                            filterValue={filterText}
+                            handleChange={(e) => setFilterText(e.target.value)}
                         />
                     </div>
                 </div>
@@ -322,10 +321,18 @@ export default function Main () {
 
 
                 <div className="row my-3">
-                    <Pagination 
+                    {/* <Pagination 
                         allActors={allActors}
 
                         filterText={filterText}
+                        pagination={pagination}
+
+                        handlePrev={goToPrevPage}
+                        handleNext={goToNextPage}
+                    /> */}
+                    <Pagination 
+                        filteredActors={filteredActors}
+
                         pagination={pagination}
 
                         handlePrev={goToPrevPage}
