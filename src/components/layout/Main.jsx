@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons"
 
+import Pagination from "../ui/Pagination"
 
 
 
@@ -124,6 +123,26 @@ export default function Main () {
         const newFilteredActors = allActors.filter(actor => actor.name.includes(filterText));
         setFilteredActors(newFilteredActors);
     }, [filterText])
+
+
+
+
+    const goToPrevPage = () => {
+        if (pagination.start === 0) return;
+        const newPagination = {
+            start: pagination.start - paginationStep,
+            end: pagination.end - paginationStep
+        }
+        setPagination(newPagination);
+    }
+    const goToNextPage = () => {
+        if (pagination.end === allActors.length - 1) return;
+        const newPagination = {
+            start: pagination.start + paginationStep,
+            end: pagination.end + paginationStep
+        }
+        setPagination(newPagination);
+    }
 
 
 
@@ -254,7 +273,7 @@ export default function Main () {
 
 
             <div className="container my-5">
-                <div className="row row-cols-4 g-3">
+                <div className="row my-3">
                     <div className="col-12">
                         <h2>
                             All Actors
@@ -264,15 +283,16 @@ export default function Main () {
                         <h4>
                             Filter by name
                         </h4>
-                        <input 
+                        <input
                             value={filterText}
                             onChange={(e) => setFilterText(e.target.value)}
-
-                            type="text" 
-                            className="form-control" 
+                            type="text"
+                            className="form-control"
                         />
                     </div>
+                </div>
 
+                <div className="row row-cols-4 g-3 my-3">
                     {
                         filteredActors.length > 0 ?
                         filteredActors.map((actor, index) => {
@@ -298,50 +318,20 @@ export default function Main () {
                             <p>Nessun risultato trovato</p>
                         </div>
                     }
-
-
-
-                    <div className="col-12">
-                        {
-                            filterText.length === 0 ?
-                            <>
-                                <div className="btn-group">
-                                    <button
-                                        onClick={() => {
-                                            if (pagination.start === 0) return;
-                                            const newPagination = {
-                                                start: pagination.start - paginationStep,
-                                                end: pagination.end - paginationStep
-                                            }
-                                            setPagination(newPagination);
-                                        }}
-                                        className="btn btn-outline-secondary"
-                                    >
-                                        <FontAwesomeIcon icon={faAngleLeft} />
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            if (pagination.end === allActors.length - 1) return;
-                                            const newPagination = {
-                                                start: pagination.start + paginationStep,
-                                                end: pagination.end + paginationStep
-                                            }
-                                            setPagination(newPagination);
-                                        }}
-                                        className="btn btn-outline-secondary"
-                                    >
-                                        <FontAwesomeIcon icon={faAngleRight} />
-                                    </button>
-                                </div>
-                                {" "}
-                                {pagination.start + 1}-{pagination.end + 1} / {allActors.length} Attori
-                            </>
-                            :
-                            ""
-                        }
-                    </div>
                 </div>
 
+
+                <div className="row my-3">
+                    <Pagination 
+                        allActors={allActors}
+
+                        filterText={filterText}
+                        pagination={pagination}
+
+                        handlePrev={goToPrevPage}
+                        handleNext={goToNextPage}
+                    />
+                </div>
 
 
             </div>
