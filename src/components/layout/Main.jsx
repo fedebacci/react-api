@@ -67,29 +67,25 @@ export default function Main () {
         axios
             .get(apiActressesUrl)
             .then(response => {
-                // console.log(response.data);
-                console.log(response.data[0]);
                 setActresses(response.data);
 
                 axios
                     .get(apiActorsUrl)
                     .then(response => {
-                        // console.log(response.data);
-                        console.log(response.data[0]);
                         setActors(response.data);
                     })
                     .catch(err => {
                         console.error(err);
                     })
                     .finally(() => {
-                        console.info("Seconda richiesta terminata")
+                        console.info("Seconda richiesta terminata");
                     });
             })
             .catch(err => {
                 console.error(err);
             })
             .finally(() => {
-                console.info("Prima richiesta terminata")
+                console.info("Prima richiesta terminata");
             });
     }, [])
 
@@ -97,11 +93,9 @@ export default function Main () {
 
     useEffect(() => {
         if (!actresses || !actors) return;
-        // const newAllActors = actresses.concat(actors);
+
         const newAllActors = shuffle(actresses.concat(actors));
-        // console.log(actresses);
-        // console.log(actors);
-        // console.log(newAllActors);
+
         setAllActors(newAllActors);
         setFilteredActors(newAllActors);
     }, [actresses, actors])
@@ -117,7 +111,6 @@ export default function Main () {
         }
 
         const newFilteredActors = allActors.filter(actor => actor.name.includes(filterText));
-        // console.log(newFilteredActors);
         setFilteredActors(newFilteredActors);
     }, [filterText])
 
@@ -270,6 +263,7 @@ export default function Main () {
                     </div>
 
                     {
+                        filteredActors.length > 0 ?
                         filteredActors.map((actor, index) => {
                             return(
                                 
@@ -282,43 +276,47 @@ export default function Main () {
                                 
                             );
                         })
+                        :
+                        <div className="col-12">
+                            <p>Nessun risultato trovato</p>
+                        </div>
                     }
 
                     <div className="col-12">
                         {
                             filterText.length === 0 ?
-                            <div className="btn-group">
-                                <button
-                                    onClick={() => {
-                                        if (pagination.start === 0) return;
-                                        const newPagination = {
-                                            start: pagination.start - paginationStep,
-                                            end: pagination.end - paginationStep
-                                        }
-                                        // console.log(pagination);
-                                        // console.log(newPagination);
-                                        setPagination(newPagination);
-                                    }}
-                                    className="btn btn-outline-secondary"
-                                >
-                                    <FontAwesomeIcon icon={faAngleLeft} />
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        if (pagination.end === allActors.length - 1) return;
-                                        const newPagination = {
-                                            start: pagination.start + paginationStep,
-                                            end: pagination.end + paginationStep
-                                        }
-                                        // console.log(pagination);
-                                        // console.log(newPagination);
-                                        setPagination(newPagination);
-                                    }}
-                                    className="btn btn-outline-secondary"
-                                >
-                                    <FontAwesomeIcon icon={faAngleRight} />
-                                </button>
-                            </div>
+                            <>
+                                <div className="btn-group">
+                                    <button
+                                        onClick={() => {
+                                            if (pagination.start === 0) return;
+                                            const newPagination = {
+                                                start: pagination.start - paginationStep,
+                                                end: pagination.end - paginationStep
+                                            }
+                                            setPagination(newPagination);
+                                        }}
+                                        className="btn btn-outline-secondary"
+                                    >
+                                        <FontAwesomeIcon icon={faAngleLeft} />
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (pagination.end === allActors.length - 1) return;
+                                            const newPagination = {
+                                                start: pagination.start + paginationStep,
+                                                end: pagination.end + paginationStep
+                                            }
+                                            setPagination(newPagination);
+                                        }}
+                                        className="btn btn-outline-secondary"
+                                    >
+                                        <FontAwesomeIcon icon={faAngleRight} />
+                                    </button>
+                                </div>
+                                {" "}
+                                {pagination.start + 1}-{pagination.end + 1} / {allActors.length} Attori
+                            </>
                             :
                             ""
                         }
