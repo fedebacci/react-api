@@ -14,6 +14,7 @@ const apiActorsUrl = 'https://lanciweb.github.io/demo/api/actors/';
 
 
 
+// * FUNZIONE PER MESCOLARE GLI OGGETTI RICEVUTI DALLE RICHIESTE API IN MODO DA NON AVERE PRIMA TUTTO UN GENERE E POI L'ALTRO ("NASCONDO" IL FATTO CHE SI TRATTI DI DUE RICHIESTE DIFFERENTI)
 /**
  * Randomly shuffle an array
  * https://stackoverflow.com/a/2450976/1293256
@@ -39,6 +40,16 @@ var shuffle = function (array) {
 
 	return array;
 };
+
+
+
+
+
+// * CREO FUNZIONE PER CONTROLLARE SE UOMO O DONNA, DATO CHE GLI OGGETTI CHE RICEVO SONO DIFFERENTI, IN VISTA DELLA CREAZIONE DI UN COMPONENTE CHE MOSTRI I DATI DELLA PERSONA IN QUESTIONE.
+const checkIfFemale = (person) => {
+    const isFemale = Object.hasOwn(person, "most_famous_movies");
+    return isFemale;
+}
 
 
 
@@ -269,7 +280,13 @@ export default function Main () {
                                 
                                 (index >= pagination.start && index <= pagination.end) ?
                                 <div className="col" key={index}>
-                                    <div className="card shadow py-1 px-2 h-100">{actor.name} ({index})</div>
+                                    <div className="card shadow py-1 px-2 h-100">
+                                        {actor.name}
+                                        {" "}
+                                        (
+                                            {checkIfFemale(actor) == true ? "F" : "M"}
+                                        )
+                                    </div>
                                 </div>
                                 :
                                 ""
@@ -281,6 +298,8 @@ export default function Main () {
                             <p>Nessun risultato trovato</p>
                         </div>
                     }
+
+
 
                     <div className="col-12">
                         {
@@ -322,6 +341,9 @@ export default function Main () {
                         }
                     </div>
                 </div>
+
+
+
             </div>
 
 
