@@ -1,0 +1,16 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+/* Mettere come classe .img-fluid se necessario */
+.card-header {
+    text-align: center;
+}
+img {
+    max-height: 100px;
+}
