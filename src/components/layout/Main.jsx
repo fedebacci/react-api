@@ -1,9 +1,56 @@
 import { useState, useEffect } from "react";
 import axios from "axios"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons"
+
+
+
 
 
 const apiActressesUrl = 'https://lanciweb.github.io/demo/api/actresses/';
 const apiActorsUrl = 'https://lanciweb.github.io/demo/api/actors/';
+
+
+
+
+
+/**
+ * Randomly shuffle an array
+ * https://stackoverflow.com/a/2450976/1293256
+ * @param  {Array} array The array to shuffle
+ * @return {String}      The first item in the shuffled array
+ */
+var shuffle = function (array) {
+
+	var currentIndex = array.length;
+	var temporaryValue, randomIndex;
+
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+
+	return array;
+};
+
+
+
+
+const paginationStep = 20;
+const initialPagination = {
+    start: 0,
+    end: paginationStep - 1,
+}
+
+
+
 
 
 export default function Main () {
@@ -12,6 +59,7 @@ export default function Main () {
     const [allActors, setAllActors] = useState([])
     const [filterText, setFilterText] = useState("")
     const [filteredActors, setFilteredActors] = useState([]);
+    const [pagination, setPagination] = useState(initialPagination);
 
 
 
@@ -20,12 +68,14 @@ export default function Main () {
             .get(apiActressesUrl)
             .then(response => {
                 // console.log(response.data);
+                console.log(response.data[0]);
                 setActresses(response.data);
 
                 axios
                     .get(apiActorsUrl)
                     .then(response => {
                         // console.log(response.data);
+                        console.log(response.data[0]);
                         setActors(response.data);
                     })
                     .catch(err => {
@@ -47,7 +97,8 @@ export default function Main () {
 
     useEffect(() => {
         if (!actresses || !actors) return;
-        const newAllActors = actresses.concat(actors);
+        // const newAllActors = actresses.concat(actors);
+        const newAllActors = shuffle(actresses.concat(actors));
         // console.log(actresses);
         // console.log(actors);
         // console.log(newAllActors);
@@ -58,8 +109,15 @@ export default function Main () {
 
 
     useEffect(() => {
+
+        if (filterText === '') {
+            setPagination(initialPagination)
+        } else {
+            setPagination({ start: 0, end: allActors.length - 1})
+        }
+
         const newFilteredActors = allActors.filter(actor => actor.name.includes(filterText));
-        console.log(newFilteredActors);
+        // console.log(newFilteredActors);
         setFilteredActors(newFilteredActors);
     }, [filterText])
 
@@ -212,18 +270,59 @@ export default function Main () {
                     </div>
 
                     {
-                        // allActors.map((actor, index) => {
                         filteredActors.map((actor, index) => {
                             return(
-                                // * DA ERRORE PER CHIAVI DOPPIE. PER CONTINUARE A USARE ID DOVREI MODIFICARE ID DEGLI ACTORS QUANDO CONCATEBO I DUE ARRAY
-                                // key={actor.id}
+                                
+                                (index >= pagination.start && index <= pagination.end) ?
                                 <div className="col" key={index}>
-                                    <div className="card shadow py-1 px-2 h-100">{actor.name}</div>
+                                    <div className="card shadow py-1 px-2 h-100">{actor.name} ({index})</div>
                                 </div>
+                                :
+                                ""
+                                
                             );
                         })
                     }
 
+                    <div className="col-12">
+                        {
+                            filterText.length === 0 ?
+                            <div className="btn-group">
+                                <button
+                                    onClick={() => {
+                                        if (pagination.start === 0) return;
+                                        const newPagination = {
+                                            start: pagination.start - paginationStep,
+                                            end: pagination.end - paginationStep
+                                        }
+                                        // console.log(pagination);
+                                        // console.log(newPagination);
+                                        setPagination(newPagination);
+                                    }}
+                                    className="btn btn-outline-secondary"
+                                >
+                                    <FontAwesomeIcon icon={faAngleLeft} />
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        if (pagination.end === allActors.length - 1) return;
+                                        const newPagination = {
+                                            start: pagination.start + paginationStep,
+                                            end: pagination.end + paginationStep
+                                        }
+                                        // console.log(pagination);
+                                        // console.log(newPagination);
+                                        setPagination(newPagination);
+                                    }}
+                                    className="btn btn-outline-secondary"
+                                >
+                                    <FontAwesomeIcon icon={faAngleRight} />
+                                </button>
+                            </div>
+                            :
+                            ""
+                        }
+                    </div>
                 </div>
             </div>
 
