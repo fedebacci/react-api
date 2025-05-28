@@ -3,10 +3,8 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons"
 
 import Button from "./Button"
 
-// export default function Pagination ({ allActors, filterText, pagination, handlePrev, handleNext  }) {
 export default function Pagination ({ filteredActors, pagination, handlePrev, handleNext  }) {
     return (
-        // filterText.length === 0 ?
         <div className="col-12">
             <div className="btn-group">
 
@@ -26,10 +24,7 @@ export default function Pagination ({ filteredActors, pagination, handlePrev, ha
 
             </div>
             {" "}
-            {/* {pagination.start + 1}-{pagination.end + 1} / {allActors.length} Actors */}
             {pagination.start + 1}-{pagination.end < filteredActors.length ? pagination.end + 1 : filteredActors.length} / {filteredActors.length} Actors
         </div>
-        // :
-        // ""
     );
 }

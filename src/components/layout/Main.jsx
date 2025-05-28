@@ -3,6 +3,7 @@ import axios from "axios"
 
 import Pagination from "../ui/Pagination"
 import FilterByText from "../ui/FilterByText"
+import ActorsList from "../actors/ActorsList";
 
 
 
@@ -45,16 +46,7 @@ var shuffle = function (array) {
 
 
 
-// * CREO FUNZIONE PER CONTROLLARE SE UOMO O DONNA, DATO CHE GLI OGGETTI CHE RICEVO SONO DIFFERENTI, IN VISTA DELLA CREAZIONE DI UN COMPONENTE CHE MOSTRI I DATI DELLA PERSONA IN QUESTIONE.
-const checkIfFemale = (person) => {
-    const isFemale = Object.hasOwn(person, "most_famous_movies");
-    return isFemale;
-}
-
-
-
-
-const paginationStep = 20;
+const paginationStep = 9;
 const initialPagination = {
     start: 0,
     end: paginationStep - 1,
@@ -153,128 +145,8 @@ export default function Main () {
         <main>
 
 
-            {/* <div className="container my-5">
-                <div className="row row-cols-4 g-3">
-                    <div className="col-12">
-                        <h2>
-                            Actresses
-                        </h2>
-                    </div>
-                    {
-                        actresses.map(actress => {
-                            return (
-                                <div className="col" key={actress.id}>
-                                    <div className="card shadow h-100">
-                                        <div className="card-header">
-                                            <img className="img-fluid" src={actress.image} alt={actress.name} />
-                                        </div>
-                                        <div className="card-body">
-                                            <strong>
-                                                {actress.name}
-                                            </strong>
-                                            <br />
-                                            <em>
-                                                {actress.nationality} - {actress.birth_year}
-                                            </em>
-                                            <br />
-                                            <br />
-                                            {actress.biography}
-                                            <br />
-                                            <br />
-                                            Awards:
-                                            <br />
-                                            {actress.awards}
-                                            <br />
-                                            <br />
-                                            Most famous films:
-                                            <ul>
-                                                {
-                                                    actress.most_famous_movies.map((movie, index) => {
-                                                        return (
-                                                            <li key={index}>
-                                                                {movie}
-                                                            </li>
-                                                        );
-                                                    })
-                                                }
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })
-                    }
-                </div>
-            </div>
             <div className="container my-5">
-                <div className="row row-cols-4 g-3">
-                    <div className="col-12">
-                        <h2>
-                            Actors
-                        </h2>
-                    </div>
-                    {
-                        actors.map(actor => {
-                            return (
-                                <div className="col" key={actor.id}>
-                                    <div className="card shadow h-100">
-                                        <div className="card-header">
-                                            <img className="img-fluid" src={actor.image} alt={actor.name} />
-                                        </div>
-                                        <div className="card-body">
-                                            <strong>
-                                                {actor.name}
-                                            </strong>
-                                            <br />
-                                            <em>
-                                                {actor.nationality} - {actor.birth_year} {actor.death_year ? " (" + actor.death_year + ")" : ""}
-                                            </em>
-                                            <br />
-                                            <br />
-                                            {actor.biography}
-                                            <br />
-                                            <br />
-                                            Awards:
-                                            <br />
-                                            {
-                                                actor.awards.map((award, index) => {
-                                                    return (
-                                                        <span key={index}>
-                                                            {award}
-                                                            {index !== actor.awards.length - 1 ? ", " : ""}
-                                                        </span> 
-                                                    );
-                                                })
-                                            }
-                                            <br />
-                                            <br />
-                                            Most famous films:
-                                            <ul>
-                                                {
-                                                    actor.known_for.map((movie, index) => {
-                                                        return (
-                                                            <li key={index}>
-                                                                {movie} {""}
-                                                            </li>
-                                                        );
-                                                    })
-                                                }
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })
-                    }
-                </div>
-            </div> */}
-            
-
-
-            <div className="container my-5">
-                <div className="row my-3">
+                <div className="row my-3 g-1">
                     <div className="col-12">
                         <h2>
                             All Actors
@@ -291,45 +163,9 @@ export default function Main () {
                     </div>
                 </div>
 
-                <div className="row row-cols-4 g-3 my-3">
-                    {
-                        filteredActors.length > 0 ?
-                        filteredActors.map((actor, index) => {
-                            return(
-                                
-                                (index >= pagination.start && index <= pagination.end) ?
-                                <div className="col" key={index}>
-                                    <div className="card shadow py-1 px-2 h-100">
-                                        {actor.name}
-                                        {" "}
-                                        (
-                                            {checkIfFemale(actor) == true ? "F" : "M"}
-                                        )
-                                    </div>
-                                </div>
-                                :
-                                ""
-                                
-                            );
-                        })
-                        :
-                        <div className="col-12">
-                            <p>Nessun risultato trovato</p>
-                        </div>
-                    }
-                </div>
 
 
                 <div className="row my-3">
-                    {/* <Pagination 
-                        allActors={allActors}
-
-                        filterText={filterText}
-                        pagination={pagination}
-
-                        handlePrev={goToPrevPage}
-                        handleNext={goToNextPage}
-                    /> */}
                     <Pagination 
                         filteredActors={filteredActors}
 
@@ -339,6 +175,13 @@ export default function Main () {
                         handleNext={goToNextPage}
                     />
                 </div>
+
+
+
+                <ActorsList 
+                    actors={filteredActors}
+                    currentPagination={pagination}
+                />
 
 
             </div>
