@@ -46,7 +46,7 @@ var shuffle = function (array) {
 
 
 
-const paginationStep = 3;
+const paginationStep = 4;
 const initialPagination = {
     start: 0,
     end: paginationStep - 1,
